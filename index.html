@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="refresh" content="1" > -->
+		<title>Light Paint</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		<style>
+			body { 
+				margin: 0; 
+				background-color: rgb(5, 5, 15);
+				font: 13px/22px Helvetica;
+			}
+			canvas { 
+				border-color: aliceblue; 
+				border: 1px;
+				position:absolute;
+			}
+			.render-wrapper{
+				top: 55px;
+				left: 520px;
+				position: fixed;
+				z-index: 1000;
+				background-color: rgba(20,20,20,0.8);
+				width: 100px;
+				text-align: center;
+				cursor: pointer;
+				height: 35px;
+				cursor: pointer;
+				border-radius: 10px;
+				color: #fff;
+				border: 1px solid gray;
+			}
+			.loadscene-wrapper{
+				top: 10px;
+				left: 520px;
+				position: fixed;
+				z-index: 1000;
+				background-color: rgba(20,20,20,0.8);
+				width: 100px;
+				text-align: center;
+				cursor: pointer;
+				height: 35px;
+				cursor: pointer;
+				border-radius: 10px;
+				color: #fff;
+				border: 1px solid gray;	
+			}
+			.tools-wrapper{
+				display: inline-flex;
+				z-index: 1000;
+				background-color: rgba(20,20,20,0.8);
+				top: 10px;
+				left: 10px;
+				position: fixed;
+				width: 500px;
+				height: 80px;
+				border-radius: 10px;
+				border: 1px solid gray;
+			}
+			.line-size-wrapper{
+				margin-top: 4px;
+				display: block;
+				width: 100px;
+				height: 76px;
+			}
+			.line-size{
+				width: 100px;
+				cursor: pointer;
+				margin-bottom: 4px;
+				color: white;
+				text-align: center;
+				height: 13px;
+				border: 1px solid gray;
+				border-radius: 5px;
+			}
+			.line-size-selected{
+				background-color: rgb(56, 56, 56);
+			}
+			.color-wrapper{
+				width: 170px;
+				height: 70px;
+				padding: 5px;
+				
+			}
+			.color-line{
+				display: inline-flex;
+			}
+			.color-slot{
+				margin: 2px;
+				border-radius: 10px;
+				width: 25px;
+				height: 25px;
+				cursor: pointer;
+				border: 2px gray solid;
+			}
+			.color-slot-selected{
+				border: 2px blanchedalmond solid;
+			}
+			.light-wrapper{
+				width: 100px;
+				height: 80px;
+			}
+			.light-option{
+				width: 90px;
+				height: 25px;
+				text-align: center;
+				color: aliceblue;
+				margin: 7px;
+				border: 2px gray solid;
+				border-radius: 5px;
+			}
+			.wireframe-sphere-light{
+				position: absolute;
+				z-index: -1000;
+				/* background-color: red; */
+				background-color: aliceblue;
+				border-radius: 100%;
+			}
+			.l1{
+				width: 150px;
+				height: 150px;
+				top: 400px;
+				left: 200px;
+			}
+			.l2{
+				width: 50px;
+				height: 50px;
+				top: 700px;
+				left: 600px;
+			}
+			.l3{
+				width: 50px;
+				height: 50px;
+				top: 200px;
+				left: 900px;
+			}
+			.ray_counter{
+				top: 100px;
+				left: 20px;
+				position: fixed;
+				color: wheat;
+			}
+
+        </style>
+        <script type="module" src="main.js"></script>
+		<script type="module" src="draw-canvas.js"></script>
+		
+	</head>
+	<body>
+
+			<div class="tools-wrapper">
+				<div class="light-wrapper">
+					<div class="light-option">plane</div>
+					<div class="light-option">sphere</div>
+				</div>
+				<div class="color-wrapper">
+					<div class="color-line">
+						<div class="color-slot" style="background-color:#c74b4b"></div>
+						<div class="color-slot" style="background-color:#c7804b"></div>
+						<div class="color-slot" style="background-color:#c7b94b"></div>
+						<div class="color-slot" style="background-color:#74c74b"></div>
+						<div class="color-slot" style="background-color:#4bc778"></div>
+					</div>
+					<div class="color-line">
+						<div class="color-slot" style="background-color:#4bc7bd"></div>
+						<div class="color-slot" style="background-color:#4b59c7"></div>
+						<div class="color-slot" style="background-color:#814bc7"></div>
+						<div class="color-slot" style="background-color:#c74bb1"></div>
+						<div class="color-slot color-slot-selected" style="background-color:#fff"></div>
+					</div>
+				</div>
+				<div class="line-size-wrapper">
+					<div class="line-size" id="tickness_3"></div>
+					<div class="line-size line-size-selected" id="tickness_6"></div>
+					<div class="line-size" id="tickness_12"></div>
+					<div class="line-size" id="tickness_24"></div>
+				</div>
+			</div>
+			<div class="render-wrapper">
+				<p>RENDER</p>
+			</div>
+			<div class="loadscene-wrapper">
+				<p>LOAD</p>
+			</div>
+
+			<div class="wireframe-sphere-light light-element l1"></div>
+			<div class="wireframe-sphere-light light-element l2"></div>
+			<div class="wireframe-sphere-light light-element l3"></div>
+
+			<canvas class="frame-draw" id="draw-canvas"></canvas>
+			<canvas class="frame-light" id="light-canvas"></canvas>
+
+			<div class="ray_counter">raycast: 0/0</div>
+			
+	</body>
+</html>
