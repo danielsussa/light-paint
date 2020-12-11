@@ -8,9 +8,9 @@ const canvasHeight = 1080;
 canvasOffscreen.width = 1920;
 canvasOffscreen.height = canvasHeight;
 
-var lightWorker = new Worker('worker/light-worker.js');
+var lightWorker = new Worker('assets/js/worker/light-worker.js');
 
-var renderWorker = new Worker('worker/render-worker.js');
+var renderWorker = new Worker('assets/js/worker/render-worker.js');
 
 renderWorker.postMessage({canvas: canvasOffscreen}, [canvasOffscreen]);
 
